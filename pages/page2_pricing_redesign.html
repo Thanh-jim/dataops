@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataOps - Abonnements et Tarifs pour PME/TPE</title>
+    <meta name="description" content="Découvrez nos tarifs adaptés aux PME et TPE. Plans Free, TPE et PME avec tarification transparente basée sur le nombre de salariés. Essai gratuit disponible.">
+    <meta name="keywords" content="tarifs dataops, prix, abonnement, PME, TPE, analytics, business intelligence">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="DataOps - Abonnements et Tarifs">
+    <meta property="og:description" content="Des abonnements simples, adaptés à la taille de votre entreprise. Tarification transparente pour les TPE et PME.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #ff6b35;
+            --dark: #0a0e14;
+            --darker: #0f1419;
+            --light: #e8eef7;
+            --text: #b0b8c8;
+            --border: rgba(0, 212, 255, 0.1);
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, #1a1f2e 50%, var(--darker) 100%);
+            color: var(--text);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* Skip Link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary);
+            color: var(--dark);
+            padding: 8px 16px;
+            text-decoration: none;
+            z-index: 1001;
+            font-weight: 600;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .mobile-menu-toggle:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        @media (max-width: 968px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(10, 14, 20, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                border-bottom: 1px solid var(--border);
+                max-height: calc(100vh - 70px);
+                overflow-y: auto;
+            }
+
+            .nav-links.active {
+                transform: translateX(0);
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 0.8rem 0;
+                border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+            }
+
+            .nav-links a::after {
+                display: none;
+            }
+        }
+
+        .cta-nav {
+            background: linear-gradient(90deg, var(--primary), #00a8cc);
+            color: var(--dark);
+            padding: 0.7rem 1.8rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .cta-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding-top: 8rem;
+            padding-bottom: 4rem;
+            min-height: 100vh;
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--primary), #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-intro {
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            padding: 2rem;
+            border-left: 3px solid var(--primary);
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .pricing-intro p {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text);
+        }
+
+        .pricing-intro strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            background: rgba(15, 20, 25, 0.4);
+            backdrop-filter: blur(10px);
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .pricing-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pricing-card:hover {
+            border-color: var(--primary);
+            background: rgba(15, 20, 25, 0.6);
+            transform: translateY(-8px);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--secondary);
+            background: rgba(255, 107, 53, 0.08);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-8px);
+            background: rgba(255, 107, 53, 0.12);
+        }
+
+        .badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--secondary), #ff8c42);
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-price {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 0.3rem;
+        }
+
+        .plan-price-detail {
+            font-size: 0.9rem;
+            color: #8a92a0;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .plan-description {
+            font-size: 0.95rem;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .features-list li {
+            padding: 0.7rem 0;
+            color: var(--text);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.05);
+        }
+
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+
+        .features-list li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 700;
+            margin-right: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .plan-examples {
+            background: rgba(0, 212, 255, 0.05);
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .plan-examples strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.6rem;
+            font-size: 0.9rem;
+        }
+
+        .plan-examples p {
+            font-size: 0.85rem;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+            line-height: 1.5;
+        }
+
+        .btn {
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), #00a8cc);
+            color: var(--dark);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid var(--border);
+            background: linear-gradient(180deg, 
+                rgba(10, 14, 20, 0.8) 0%, 
+                rgba(15, 20, 25, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-description {
+            color: var(--text);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .footer-social a:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+        }
+
+        .footer-section h3 {
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: #6a7280;
+            font-size: 0.85rem;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-legal a {
+            color: #6a7280;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-legal a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 968px) {
+            .footer-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .footer-brand {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 568px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-legal {
+                justify-content: center;
+            }
+        }
+
+        /* Focus styles */
+        a:focus, button:focus, input:focus, textarea:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        input:focus {
+            border-color: var(--primary) !important;
+            background: rgba(15, 20, 25, 0.8) !important;
+        }
+
+        .btn, .cta-nav {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0);
+            animation: ripple-animation 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Chatbot toggle button - Modern Tech Design */
+        .chatbot-toggle-btn {
+            position: fixed !important;
+            bottom: 2rem !important;
+            right: 2rem !important;
+            z-index: 1002;
+            background: linear-gradient(135deg, var(--primary), #00a8cc);
+            color: var(--dark);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            padding: 0;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.4), 
+                        0 0 0 0 rgba(0, 212, 255, 0.5);
+            width: 64px;
+            height: 64px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .chatbot-toggle-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .chatbot-toggle-btn:hover::before {
+            left: 100%;
+        }
+
+        .chatbot-toggle-btn .robot-emoji-small {
+            position: relative;
+            z-index: 10;
+            font-size: 1.4rem;
+            animation: float 3s ease-in-out infinite;
+            display: block;
+            line-height: 1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .chatbot-toggle-btn .chatbot-badge {
+            display: none;
+        }
+
+        .chatbot-toggle-btn:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .chatbot-toggle-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 32px rgba(0, 212, 255, 0.5);
+        }
+
+        .chatbot-toggle-btn.show {
+            display: flex;
+        }
+
+        /* Floating Chatbot Widget - Modern Tech Design */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 400px;
+            height: 650px;
+            background: rgba(10, 14, 20, 0.98);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6),
+                        0 0 0 1px rgba(0, 212, 255, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            z-index: 1002;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                        opacity 0.3s ease,
+                        box-shadow 0.3s ease;
+            cursor: move;
+        }
+
+        .chatbot-widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--secondary), 
+                var(--primary));
+            opacity: 0.8;
+        }
+
+        .chatbot-widget.minimized {
+            height: 64px;
+            width: 64px;
+            border-radius: 50%;
+            bottom: 20px;
+            right: 20px;
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.4);
+        }
+
+        .chatbot-widget.minimized .chatbot-content {
+            display: none;
+        }
+
+        .chatbot-widget.dragging {
+            opacity: 0.9;
+            cursor: grabbing;
+            box-shadow: 0 30px 100px rgba(0, 212, 255, 0.3);
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, 
+                rgba(0, 212, 255, 0.15), 
+                rgba(255, 107, 53, 0.08));
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .chatbot-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(0, 212, 255, 0.5), 
+                transparent);
+        }
+
+        .chatbot-header-title {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--primary);
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.05rem;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .chatbot-header-title .robot-emoji {
+            font-size: 1.6rem;
+            animation: wave 2s ease-in-out infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 4px rgba(0, 212, 255, 0.5));
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        .chatbot-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chatbot-btn {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            color: var(--text);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chatbot-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(0, 212, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .chatbot-btn:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chatbot-btn:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+        }
+
+        .chatbot-btn i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .chatbot-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .chatbot-widget.minimized .chatbot-header {
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .chatbot-widget.minimized .chatbot-header-title span,
+        .chatbot-widget.minimized .chatbot-controls {
+            display: none;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            gap: 0.8rem;
+            min-height: 0;
+            background: rgba(10, 14, 20, 0.3);
+        }
+
+        .chat-messages:empty::before {
+            content: 'Commencez une conversation avec l\'IA...';
+            color: var(--text);
+            font-style: italic;
+            text-align: center;
+            padding: 2rem;
+            opacity: 0.5;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 212, 255, 0.5);
+        }
+
+        .chat-message {
+            background: rgba(0, 212, 255, 0.08);
+            border-left: 3px solid var(--primary);
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: var(--text);
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-message strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .chat-message.user {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 212, 255, 0.1));
+            border-left: 3px solid var(--primary);
+            align-self: flex-end;
+            max-width: 85%;
+            border-radius: 12px 12px 4px 12px;
+        }
+
+        .chat-message.user strong {
+            color: #ffffff;
+        }
+
+        .chat-message.ai {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 107, 53, 0.05));
+            border-left: 3px solid var(--secondary);
+            align-self: flex-start;
+            max-width: 85%;
+            border-radius: 12px 12px 12px 4px;
+        }
+
+        .chat-message.ai strong {
+            color: var(--secondary);
+        }
+
+        .chat-message.typing {
+            background: rgba(255, 107, 53, 0.1);
+            border-left: 3px solid var(--secondary);
+            align-self: flex-start;
+            max-width: 85%;
+        }
+
+        .chat-message.typing::after {
+            content: '...';
+            animation: typing 1.5s infinite;
+        }
+
+        @keyframes typing {
+            0%, 60% { opacity: 1; }
+            30% { opacity: 0.3; }
+        }
+
+        .chat-input-area {
+            margin-top: auto;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+            background: rgba(15, 20, 25, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .chat-input {
+            background: rgba(15, 20, 25, 0.8);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 0.9rem 1rem;
+            color: #ffffff;
+            min-height: 60px;
+            resize: none;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+            outline: none;
+        }
+
+        .chat-send {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(90deg, var(--primary), #00a8cc);
+            color: var(--dark);
+            border: none;
+            padding: 0.9rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.3);
+        }
+
+        .chat-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .chat-send:active {
+            transform: translateY(0);
+        }
+
+        .chat-send:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-8px);
+            }
+
+            .pricing-card.featured.visible {
+                transform: scale(1);
+            }
+
+            .section-header h1 {
+                font-size: 2rem;
+            }
+
+            .cta-nav {
+                display: none;
+            }
+
+            .chatbot-widget {
+                width: calc(100vw - 40px);
+                max-width: 380px;
+                height: calc(100vh - 100px);
+                max-height: 600px;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .chatbot-widget.minimized {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+    
+    <!-- Navigation -->
+    <nav role="navigation" aria-label="Navigation principale">
+        <div class="logo"><a href="../index.html" style="text-decoration: none; background: inherit; -webkit-background-clip: inherit; background-clip: inherit; -webkit-text-fill-color: inherit;">DataOps</a></div>
+        <button class="mobile-menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false" id="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="../index.html#features">Fonctionnalités</a></li>
+            <li><a href="page2_pricing_redesign.html" aria-current="page">Abonnements</a></li>
+            <li><a href="page3_interface_redesign.html">Interface</a></li>
+        </ul>
+        <button class="cta-nav" onclick="window.location.href='page3_interface_redesign.html#form'" aria-label="Essayer DataOps gratuitement">Essayer gratuitement</button>
+    </nav>
+
+    <!-- Floating Chatbot Toggle Button -->
+    <button class="chatbot-toggle-btn show" aria-label="Ouvrir le chatbot" id="chatbot-toggle-btn">
+        <span class="robot-emoji-small">🤖</span>
+    </button>
+
+    <!-- Pricing Section -->
+    <main id="main-content">
+    <section class="pricing" aria-labelledby="pricing-heading">
+        <div class="section-header">
+            <h1 id="pricing-heading">Abonnements DataOps</h1>
+        </div>
+
+        <div class="pricing-intro">
+            <p><strong>Des abonnements simples, adaptés à la taille de votre entreprise.</strong></p>
+            <p>Plus votre équipe est petite, plus vous payez moins. Une tarification transparente et flexible pour les TPE et PME.</p>
+        </div>
+
+        <!-- Price Calculator -->
+        <div class="price-calculator" style="max-width: 600px; margin: 3rem auto; padding: 2rem; border: 1px solid var(--border); border-radius: 12px; background: rgba(15, 20, 25, 0.4); backdrop-filter: blur(10px);">
+            <h3 style="font-size: 1.3rem; font-weight: 600; color: #ffffff; margin-bottom: 1.5rem; font-family: 'Montserrat', sans-serif; text-align: center;">Calculer votre tarif</h3>
+            <label for="employee-count" style="display: block; margin-bottom: 0.8rem; color: var(--text); font-weight: 500;">Nombre de salariés:</label>
+            <input type="number" id="employee-count" min="1" max="250" value="10" style="width: 100%; padding: 0.8rem; background: rgba(15, 20, 25, 0.6); border: 1px solid var(--border); border-radius: 8px; color: #ffffff; font-size: 1rem; margin-bottom: 1.5rem; transition: all 0.3s ease;" oninput="calculatePrice()">
+            <div id="price-result" style="padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-left: 3px solid var(--primary); border-radius: 8px; text-align: center;">
+                <p style="color: var(--text); margin-bottom: 0.5rem;">Plan recommandé:</p>
+                <p style="font-size: 1.8rem; font-weight: 700; color: var(--primary); font-family: 'Montserrat', sans-serif;" id="calculated-price">150€/mois</p>
+                <p style="font-size: 0.9rem; color: #8a92a0; margin-top: 0.5rem;" id="plan-type">Offre TPE</p>
+            </div>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Free Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Free</div>
+                <div class="plan-price">0€</div>
+                <div class="plan-price-detail">/mois</div>
+                <div class="plan-description">Pour tester DataOps gratuitement avant de s'abonner.</div>
+                <ul class="features-list">
+                    <li>1 import de données</li>
+                    <li>Dashboard automatique</li>
+                    <li>5 analyses IA/mois</li>
+                    <li>Recommandations simples</li>
+                    <li>Chatbot IA limité</li>
+                </ul>
+                <div class="plan-examples">
+                    <strong>Idéal pour :</strong>
+                    <p>Indépendants, micro-entrepreneurs, test du produit</p>
+                </div>
+                <button class="btn btn-secondary" onclick="handlePlanSelect('free')" aria-label="Commencer avec le plan gratuit">Commencer</button>
+            </div>
+
+            <!-- TPE Plan (Featured) -->
+            <div class="pricing-card featured">
+                <div class="badge">Populaire</div>
+                <div class="plan-name">Offre TPE</div>
+                <div class="plan-price">250€</div>
+                <div class="plan-price-detail">–10€ par salarié</div>
+                <div class="plan-description">Pour les entreprises entre 1 et 10 salariés.</div>
+                <ul class="features-list">
+                    <li>Dashboard intelligent complet</li>
+                    <li>Analyse automatique</li>
+                    <li>Recommandations IA illimitées</li>
+                    <li>Assistant A/B test</li>
+                    <li>Multi-utilisateurs (jusqu'à 3)</li>
+                    <li>Jusqu'à 3 projets</li>
+                </ul>
+                <div class="plan-examples">
+                    <strong>Exemples de prix :</strong>
+                    <p>• 10 salariés → 150€/mois</p>
+                    <p>• 8 salariés → 170€/mois</p>
+                    <p>• 5 salariés → 200€/mois</p>
+                </div>
+                <button class="btn btn-primary" onclick="handlePlanSelect('tpe')" aria-label="Essayer le plan TPE maintenant">Essayer maintenant</button>
+            </div>
+
+            <!-- PME Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Offre PME</div>
+                <div class="plan-price">1000€</div>
+                <div class="plan-price-detail">–1€ par salarié</div>
+                <div class="plan-description">Pour les entreprises entre 11 et 250 salariés.</div>
+                <ul class="features-list">
+                    <li>Toutes les fonctionnalités TPE</li>
+                    <li>Tests A/B illimités</li>
+                    <li>Projets illimités</li>
+                    <li>Rôles et permissions avancés</li>
+                    <li>Connecteurs API</li>
+                    <li>Support prioritaire</li>
+                </ul>
+                <div class="plan-examples">
+                    <strong>Exemples de prix :</strong>
+                    <p>• 250 salariés → 750€/mois</p>
+                    <p>• 150 salariés → 850€/mois</p>
+                    <p>• 100 salariés → 900€/mois</p>
+                </div>
+                <button class="btn btn-secondary" onclick="handlePlanSelect('pme')" aria-label="Nous contacter pour le plan PME">Nous contacter</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="footer-logo">DataOps</div>
+                <p class="footer-description">Rendez la donnée accessible, compréhensible et exploitable. L'IA pour simplifier la data des PME/TPE.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="LinkedIn DataOps"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter DataOps"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="GitHub DataOps"><i class="fab fa-github"></i></a>
+                    <a href="#" aria-label="Email DataOps"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Produit</h3>
+                <ul class="footer-links">
+                    <li><a href="page3_interface_redesign.html">Interface</a></li>
+                    <li><a href="page2_pricing_redesign.html">Tarifs</a></li>
+                    <li><a href="../index.html#features">Fonctionnalités</a></li>
+                    <li><a href="page3_interface_redesign.html#form">Essai gratuit</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Entreprise</h3>
+                <ul class="footer-links">
+                    <li><a href="#">À propos</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Carrières</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Centre d'aide</a></li>
+                    <li><a href="#">API</a></li>
+                    <li><a href="#">Statut</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="footer-copyright">&copy; 2025 DataOps. Tous droits réservés.</p>
+            <div class="footer-legal">
+                <a href="#">Mentions légales</a>
+                <a href="#">Politique de confidentialité</a>
+                <a href="#">CGU</a>
+            </div>
+        </div>
+    </footer>
+    </main>
+
+    <!-- Floating Chatbot Widget -->
+    <div class="chatbot-widget" id="chatbot-widget" style="display: none;">
+        <div class="chatbot-header" id="chatbot-header">
+            <div class="chatbot-header-title">
+                <span class="robot-emoji">🤖</span>
+                <span>Assistant IA</span>
+            </div>
+            <div class="chatbot-controls">
+                <button class="chatbot-btn" id="chatbot-minimize" aria-label="Réduire le chatbot">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button class="chatbot-btn" id="chatbot-close" aria-label="Fermer le chatbot">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="chatbot-content">
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-area">
+                <textarea class="chat-input" id="chat-input" placeholder="Posez une question à l'IA..." aria-label="Zone de saisie pour poser une question à l'assistant IA" rows="2"></textarea>
+                <button class="chat-send" id="chat-send" aria-label="Envoyer votre question à l'assistant IA">
+                    <i class="fas fa-paper-plane"></i>
+                    Envoyer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+        
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                this.setAttribute('aria-expanded', !isExpanded);
+                navLinks.classList.toggle('active');
+                
+                const icon = this.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            });
+
+            navLinks.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    navLinks.classList.remove('active');
+                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                    const icon = mobileMenuToggle.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        }
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 150);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.pricing-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Price calculator
+        function calculatePrice() {
+            const employeeCount = parseInt(document.getElementById('employee-count').value) || 1;
+            const priceResult = document.getElementById('calculated-price');
+            const planType = document.getElementById('plan-type');
+            
+            let price = 0;
+            let plan = '';
+            
+            if (employeeCount <= 10) {
+                price = Math.max(250 - (employeeCount * 10), 50); // Minimum 50€
+                plan = 'Offre TPE';
+            } else if (employeeCount <= 250) {
+                price = Math.max(1000 - employeeCount, 750); // Minimum 750€
+                plan = 'Offre PME';
+            } else {
+                price = 750;
+                plan = 'Offre PME (sur mesure)';
+            }
+            
+            priceResult.textContent = price + '€/mois';
+            planType.textContent = plan;
+        }
+
+        // Initialize calculator
+        calculatePrice();
+
+        // Plan selection handler
+        function handlePlanSelect(planType) {
+            console.log(`Plan sélectionné: ${planType}`);
+            // Add ripple effect
+            event.target.classList.add('clicked');
+            
+            // Here you would typically redirect to signup or show a modal
+            if (planType === 'free') {
+                alert('Redirection vers l\'inscription au plan gratuit...');
+            } else if (planType === 'tpe') {
+                alert('Redirection vers l\'essai du plan TPE...');
+            } else if (planType === 'pme') {
+                alert('Redirection vers le formulaire de contact pour le plan PME...');
+            }
+        }
+
+        // Add ripple effect to buttons
+        document.querySelectorAll('.btn, .cta-nav').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && href.length > 1) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Floating chatbot widget (repris de la page interface)
+        (function() {
+            const chatbotWidget = document.getElementById('chatbot-widget');
+            const chatbotHeader = document.getElementById('chatbot-header');
+            const chatbotMinimize = document.getElementById('chatbot-minimize');
+            const chatbotClose = document.getElementById('chatbot-close');
+            const chatbotToggleBtn = document.getElementById('chatbot-toggle-btn');
+            const chatSend = document.getElementById('chat-send');
+            const chatInput = document.getElementById('chat-input');
+            const chatMessages = document.getElementById('chat-messages');
+
+            if (!chatbotWidget || !chatbotHeader) return;
+
+            let isDragging = false;
+            let currentX = 0;
+            let currentY = 0;
+            let initialX = 0;
+            let initialY = 0;
+            let xOffset = 0;
+            let yOffset = 0;
+
+            const aiResponses = {
+                'vente': 'Les ventes ont augmenté de 12% ce mois. Je recommande d\'analyser les produits les plus performants et de renforcer leur promotion.',
+                'conversion': 'Le taux de conversion est de 3.8%. Pour l\'améliorer, je suggère d\'optimiser le parcours d\'achat et de tester différentes variantes de CTA.',
+                'revenu': 'Les revenus mensuels s\'élèvent à 12,540€. C\'est une excellente performance ! Pour aller plus loin, analysez les segments clients les plus rentables.',
+                'graphique': 'Je peux vous aider à créer des visualisations personnalisées. Dites-moi quelles métriques vous souhaitez analyser.',
+                'aide': 'Je peux vous aider avec : analyse de données, recommandations d\'optimisation, création de graphiques, et interprétation des métriques.',
+                'bonjour': 'Bonjour ! Je suis votre assistant IA DataOps. Comment puis-je vous aider aujourd\'hui ?',
+                'salut': 'Salut ! Je suis là pour vous aider à analyser vos données. Que souhaitez-vous savoir ?',
+                'test': 'Pour lancer un test A/B, allez dans la section Outils. Je peux vous guider dans la configuration si besoin.',
+                'projet': 'Pour créer un nouveau projet, utilisez le formulaire dans le menu. Je peux vous aider à choisir les bonnes sources de données.',
+                'donnée': 'Vos données sont synchronisées en temps réel. Je peux vous aider à interpréter les tendances et anomalies détectées.',
+                'recommandation': 'Basé sur vos données actuelles, je recommande : 1) Optimiser l\'expérience mobile, 2) Tester de nouvelles couleurs de CTA, 3) Analyser les abandons de panier.'
+            };
+
+            function getAIResponse(userMessage) {
+                const lowerMessage = userMessage.toLowerCase();
+                for (const [keyword, response] of Object.entries(aiResponses)) {
+                    if (lowerMessage.includes(keyword)) return response;
+                }
+                if (lowerMessage.includes('comment') || lowerMessage.includes('pourquoi')) {
+                    return 'Excellente question ! Basé sur vos données, je peux vous expliquer les tendances observées. Quelle métrique vous intéresse ?';
+                }
+                if (lowerMessage.includes('quoi') || lowerMessage.includes('qu\'est')) {
+                    return 'Je peux vous aider à comprendre vos données et à prendre des décisions éclairées. Que souhaitez-vous analyser précisément ?';
+                }
+                return 'Merci pour votre question ! Je suis en train d\'analyser vos données. En attendant, je peux vous aider avec l\'analyse des ventes, la conversion ou la création de visualisations.';
+            }
+
+            function addChatMessage(message, isUser = false) {
+                if (!chatMessages) return;
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message ${isUser ? 'user' : 'ai'}`;
+                messageDiv.innerHTML = `<strong>${isUser ? 'Vous' : 'Assistant IA'}:</strong><br>${message}`;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'chat-message typing ai';
+                typingDiv.id = 'typing-indicator';
+                typingDiv.innerHTML = '<strong>Assistant IA:</strong> En train de réfléchir';
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                return typingDiv;
+            }
+
+            function removeTypingIndicator() {
+                const indicator = document.getElementById('typing-indicator');
+                if (indicator) indicator.remove();
+            }
+
+            function showChatbotToggle() {
+                if (chatbotToggleBtn) {
+                    chatbotToggleBtn.classList.add('show');
+                    chatbotToggleBtn.style.display = 'flex';
+                }
+            }
+
+            function hideChatbotToggle() {
+                if (chatbotToggleBtn) {
+                    chatbotToggleBtn.classList.remove('show');
+                    chatbotToggleBtn.style.display = 'none';
+                }
+            }
+
+            function setTranslate(xPos, yPos, el) {
+                el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+            }
+
+            function dragStart(e) {
+                if (chatbotWidget.classList.contains('minimized')) return;
+                if (e.type === 'touchstart') {
+                    initialX = e.touches[0].clientX - xOffset;
+                    initialY = e.touches[0].clientY - yOffset;
+                } else {
+                    initialX = e.clientX - xOffset;
+                    initialY = e.clientY - yOffset;
+                }
+                if (e.target === chatbotHeader || chatbotHeader.contains(e.target)) {
+                    if (e.target.closest('.chatbot-btn')) return;
+                    isDragging = true;
+                    chatbotWidget.classList.add('dragging');
+                }
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                if (e.type === 'touchmove') {
+                    currentX = e.touches[0].clientX - initialX;
+                    currentY = e.touches[0].clientY - initialY;
+                } else {
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                }
+                xOffset = currentX;
+                yOffset = currentY;
+                setTranslate(currentX, currentY, chatbotWidget);
+            }
+
+            function dragEnd() {
+                if (!isDragging) return;
+                initialX = currentX;
+                initialY = currentY;
+                isDragging = false;
+                chatbotWidget.classList.remove('dragging');
+            }
+
+            chatbotHeader.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+            chatbotHeader.addEventListener('touchstart', dragStart);
+            document.addEventListener('touchmove', drag);
+            document.addEventListener('touchend', dragEnd);
+
+            if (chatbotMinimize) {
+                chatbotMinimize.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    chatbotWidget.classList.toggle('minimized');
+                    const icon = chatbotMinimize.querySelector('i');
+                    if (chatbotWidget.classList.contains('minimized')) {
+                        icon.classList.replace('fa-minus', 'fa-plus');
+                        showChatbotToggle();
+                    } else {
+                        icon.classList.replace('fa-plus', 'fa-minus');
+                        hideChatbotToggle();
+                    }
+                });
+            }
+
+            if (chatbotClose) {
+                chatbotClose.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    chatbotWidget.style.display = 'none';
+                    showChatbotToggle();
+                });
+            }
+
+            // Show toggle button when chatbot is closed
+            if (chatbotToggleBtn) {
+                // Check initial state - show button if widget is hidden or minimized
+                setTimeout(function() {
+                    const widgetDisplay = window.getComputedStyle(chatbotWidget).display;
+                    const isMinimized = chatbotWidget.classList.contains('minimized');
+                    
+                    if (widgetDisplay === 'none' || isMinimized) {
+                        showChatbotToggle();
+                    } else {
+                        hideChatbotToggle();
+                    }
+                }, 200);
+
+                chatbotToggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    
+                    // Show widget
+                    chatbotWidget.style.display = 'flex';
+                    chatbotWidget.classList.remove('minimized');
+                    
+                    // Reset minimize button icon
+                    if (chatbotMinimize) {
+                        chatbotMinimize.querySelector('i').classList.remove('fa-plus');
+                        chatbotMinimize.querySelector('i').classList.add('fa-minus');
+                    }
+                    
+                    // Hide toggle button
+                    hideChatbotToggle();
+                    
+                    // Reset position when reopening - position it nicely
+                    chatbotWidget.style.bottom = '20px';
+                    chatbotWidget.style.right = '20px';
+                    chatbotWidget.style.transform = 'translate3d(0, 0, 0)';
+                    xOffset = 0;
+                    yOffset = 0;
+                });
+            }
+
+            // Ensure toggle button visibility on page load and when widget is minimized
+            function checkChatbotState() {
+                const chatbotToggleBtn = document.getElementById('chatbot-toggle-btn');
+                const chatbotWidget = document.getElementById('chatbot-widget');
+                if (chatbotToggleBtn && chatbotWidget) {
+                    const widgetDisplay = window.getComputedStyle(chatbotWidget).display;
+                    const isMinimized = chatbotWidget.classList.contains('minimized');
+                    
+                    if (widgetDisplay === 'none' || isMinimized) {
+                        showChatbotToggle();
+                    } else {
+                        hideChatbotToggle();
+                    }
+                }
+            }
+
+            window.addEventListener('load', function() {
+                setTimeout(checkChatbotState, 300);
+            });
+
+            // Also check on DOMContentLoaded
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(checkChatbotState, 300);
+            });
+
+            // Observer pour détecter les changements de visibilité du widget
+            if (chatbotWidget) {
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'attributes' && 
+                            (mutation.attributeName === 'style' || mutation.attributeName === 'class')) {
+                            setTimeout(checkChatbotState, 100);
+                        }
+                    });
+                });
+
+                observer.observe(chatbotWidget, {
+                    attributes: true,
+                    attributeFilter: ['style', 'class']
+                });
+            }
+
+            chatbotWidget.addEventListener('click', function(e) {
+                if (chatbotWidget.classList.contains('minimized') && !e.target.closest('.chatbot-btn')) {
+                    chatbotWidget.classList.remove('minimized');
+                    if (chatbotMinimize) {
+                        chatbotMinimize.querySelector('i').classList.remove('fa-plus');
+                        chatbotMinimize.querySelector('i').classList.add('fa-minus');
+                    }
+                    hideChatbotToggle();
+                }
+            });
+
+            if (chatSend && chatInput && chatMessages) {
+                chatSend.addEventListener('click', function() {
+                    const message = chatInput.value.trim();
+                    if (!message) return;
+                    addChatMessage(message, true);
+                    chatInput.value = '';
+                    const typingIndicator = showTypingIndicator();
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        const aiResponse = getAIResponse(message);
+                        addChatMessage(aiResponse, false);
+                    }, 1000 + Math.random() * 900);
+                });
+
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        chatSend.click();
+                    }
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
