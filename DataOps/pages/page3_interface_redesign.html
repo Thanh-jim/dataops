@@ -1,0 +1,3745 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataOps - Interface Dashboard et Analytics</title>
+    <meta name="description" content="Découvrez l'interface DataOps : dashboard intelligent, analyses en temps réel, recommandations IA et tests A/B automatisés pour PME et TPE.">
+    <meta name="keywords" content="dashboard dataops, interface analytics, business intelligence, dashboard PME">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="DataOps - Interface Dashboard">
+    <meta property="og:description" content="Dashboard intelligent avec analyses en temps réel et recommandations IA.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #ff6b35;
+            --dark: #0a0e14;
+            --darker: #0f1419;
+            --light: #e8eef7;
+            --text: #b0b8c8;
+            --border: rgba(0, 212, 255, 0.1);
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 107, 53, 0.05) 0%, transparent 50%),
+                linear-gradient(135deg, var(--dark) 0%, #1a1f2e 50%, var(--darker) 100%);
+            color: var(--text);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Skip Link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary);
+            color: var(--dark);
+            padding: 8px 16px;
+            text-decoration: none;
+            z-index: 1001;
+            font-weight: 600;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 220px 1fr 320px;
+            min-height: 100vh;
+            gap: 0;
+            padding-top: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: rgba(10, 14, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2.5rem;
+            font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sidebar-logo:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
+        }
+
+        .sidebar-logo a {
+            background: inherit;
+            -webkit-background-clip: inherit;
+            background-clip: inherit;
+            -webkit-text-fill-color: inherit;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .sidebar-item {
+            padding: 0.9rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--text);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+        }
+
+        .sidebar-item:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary);
+        }
+
+        .sidebar-item.active {
+            background: rgba(0, 212, 255, 0.15);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+            padding-left: calc(1rem - 3px);
+        }
+
+        .sidebar-item i {
+            font-size: 1.1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            background: transparent;
+            min-height: calc(100vh - 60px);
+        }
+
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-title {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            color: #ffffff;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .header-user i {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .metric-card {
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 12px;
+            padding: 1.8rem;
+            background: linear-gradient(135deg, 
+                rgba(15, 20, 25, 0.6), 
+                rgba(10, 14, 20, 0.4));
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(20px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .metric-card:hover::before {
+            opacity: 1;
+        }
+
+        .metric-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .metric-card:hover {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, 
+                rgba(15, 20, 25, 0.8), 
+                rgba(10, 14, 20, 0.6));
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(0, 212, 255, 0.2),
+                        0 0 0 1px rgba(0, 212, 255, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: #8a92a0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-change {
+            font-size: 0.85rem;
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .chart-card {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.8rem;
+            background: rgba(15, 20, 25, 0.4);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .chart-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .chart-card:hover {
+            border-color: var(--primary);
+            background: rgba(15, 20, 25, 0.6);
+        }
+
+        .chart-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 1.2rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        .chart-placeholder {
+            height: 150px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(255, 107, 53, 0.08));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6a7280;
+            font-size: 0.9rem;
+        }
+
+        .chart-placeholder i {
+            font-size: 2.5rem;
+            margin-right: 1rem;
+        }
+
+        /* Products Section */
+        .products-section {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.8rem;
+            background: rgba(15, 20, 25, 0.4);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .products-section:hover {
+            border-color: var(--primary);
+            background: rgba(15, 20, 25, 0.6);
+        }
+
+        .products-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 1.2rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .product-list {
+            list-style: none;
+        }
+
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.05);
+            font-size: 0.9rem;
+        }
+
+        .product-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-name {
+            color: var(--text);
+        }
+
+        .product-value {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Chat Sidebar - Fixed Recommendations */
+        .chat-sidebar {
+            background: rgba(10, 14, 20, 0.9);
+            backdrop-filter: blur(15px);
+            border-left: 1px solid var(--border);
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        /* Floating Chatbot Widget - Modern Tech Design */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 400px;
+            height: 650px;
+            background: rgba(10, 14, 20, 0.98);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6),
+                        0 0 0 1px rgba(0, 212, 255, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            z-index: 1002;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                        opacity 0.3s ease,
+                        box-shadow 0.3s ease;
+            cursor: move;
+        }
+
+        .chatbot-widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--secondary), 
+                var(--primary));
+            opacity: 0.8;
+        }
+
+        .chatbot-widget.minimized {
+            height: 64px;
+            width: 64px;
+            border-radius: 50%;
+            bottom: 20px;
+            right: 20px;
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.4);
+        }
+
+        .chatbot-widget.minimized .chatbot-content {
+            display: none;
+        }
+
+        .chatbot-widget.dragging {
+            opacity: 0.9;
+            cursor: grabbing;
+            box-shadow: 0 30px 100px rgba(0, 212, 255, 0.3);
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, 
+                rgba(0, 212, 255, 0.15), 
+                rgba(255, 107, 53, 0.08));
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .chatbot-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(0, 212, 255, 0.5), 
+                transparent);
+        }
+
+        .chatbot-header-title {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--primary);
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.05rem;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .chatbot-header-title .robot-emoji {
+            font-size: 1.6rem;
+            animation: wave 2s ease-in-out infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 4px rgba(0, 212, 255, 0.5));
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        .chatbot-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chatbot-btn {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            color: var(--text);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chatbot-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(0, 212, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .chatbot-btn:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chatbot-btn:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+        }
+
+        .chatbot-btn i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .chatbot-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .chatbot-widget.minimized .chatbot-header {
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .chatbot-widget.minimized .chatbot-header-title span,
+        .chatbot-widget.minimized .chatbot-controls {
+            display: none;
+        }
+
+        .chat-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-family: 'Montserrat', sans-serif;
+            padding: 1.5rem 1.5rem 1rem;
+            border-bottom: 1px solid var(--border);
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .chat-header i {
+            font-size: 1.4rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Fixed Recommendations Section */
+        .chat-fixed-section {
+            padding: 1.5rem;
+            background: rgba(15, 20, 25, 0.3);
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .insights-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 212, 255, 0.05));
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 10px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .insights-card h4 {
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .insights-card h4 i {
+            font-size: 1rem;
+        }
+
+        .insights-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .insights-list li {
+            color: var(--text);
+            font-size: 0.85rem;
+            padding: 0.5rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .insights-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .insights-list li.positive::before {
+            content: '↑';
+            color: #10b981;
+        }
+
+        .insights-list li.negative::before {
+            content: '↓';
+            color: #ef4444;
+        }
+
+        .chat-message {
+            background: rgba(0, 212, 255, 0.08);
+            border-left: 3px solid var(--primary);
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: var(--text);
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-message strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .ab-test-card {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.15), rgba(255, 107, 53, 0.08));
+            border: 1px solid rgba(255, 107, 53, 0.3);
+            border-radius: 10px;
+            padding: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.1);
+        }
+
+        .ab-test-card:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(255, 107, 53, 0.12));
+            border-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 107, 53, 0.2);
+        }
+
+        .ab-test-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 0.8rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .ab-test-content {
+            font-size: 0.85rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .ab-test-content strong {
+            color: #ffffff;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .ab-test-buttons {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .ab-btn {
+            flex: 1;
+            padding: 0.7rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .ab-btn:focus, .chat-send:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .ab-btn.launch {
+            background: linear-gradient(90deg, var(--secondary), #ff8c42);
+            color: white;
+        }
+
+        .ab-btn.launch:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 107, 53, 0.3);
+        }
+
+        .ab-btn.secondary {
+            background: rgba(0, 212, 255, 0.15);
+            color: var(--primary);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .ab-btn.secondary:hover {
+            background: rgba(0, 212, 255, 0.25);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            gap: 0.8rem;
+            min-height: 0;
+            background: rgba(10, 14, 20, 0.3);
+        }
+
+        .chat-sidebar .chat-messages {
+            display: none; /* Hide chat messages in sidebar, only show in widget */
+        }
+
+        .chat-sidebar .chat-input-area {
+            display: none; /* Hide input area in sidebar, only show in widget */
+        }
+
+        .chat-messages:empty::before {
+            content: 'Commencez une conversation avec l\'IA...';
+            color: var(--text);
+            font-style: italic;
+            text-align: center;
+            padding: 2rem;
+            opacity: 0.5;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 212, 255, 0.5);
+        }
+
+        .chat-message.user {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 212, 255, 0.1));
+            border-left: 3px solid var(--primary);
+            align-self: flex-end;
+            max-width: 85%;
+            border-radius: 12px 12px 4px 12px;
+        }
+
+        .chat-message.user strong {
+            color: #ffffff;
+        }
+
+        .chat-message.ai {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 107, 53, 0.05));
+            border-left: 3px solid var(--secondary);
+            align-self: flex-start;
+            max-width: 85%;
+            border-radius: 12px 12px 12px 4px;
+        }
+
+        .chat-message.ai strong {
+            color: var(--secondary);
+        }
+
+        .chat-message.typing {
+            background: rgba(255, 107, 53, 0.1);
+            border-left: 3px solid var(--secondary);
+            align-self: flex-start;
+            max-width: 85%;
+        }
+
+        .chat-message.typing::after {
+            content: '...';
+            animation: typing 1.5s infinite;
+        }
+
+        @keyframes typing {
+            0%, 60% { opacity: 1; }
+            30% { opacity: 0.3; }
+        }
+
+        .chat-input-area {
+            margin-top: auto;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+            background: rgba(15, 20, 25, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .chat-input {
+            background: rgba(15, 20, 25, 0.8);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        }
+
+        .chat-send {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .chat-send:active {
+            transform: translateY(0);
+        }
+
+        /* Chat sidebar toggle button for mobile */
+        .chat-toggle-btn {
+            display: none;
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            z-index: 1002;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+            width: 56px;
+            height: 56px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-toggle-btn:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+
+        /* Chatbot toggle button - Modern Tech Design */
+        .chatbot-toggle-btn {
+            position: fixed !important;
+            bottom: 2rem !important;
+            right: 2rem !important;
+            z-index: 1002;
+            background: linear-gradient(135deg, var(--primary), #00a8cc);
+            color: var(--dark);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            padding: 0;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.4), 
+                        0 0 0 0 rgba(0, 212, 255, 0.5);
+            width: 64px;
+            height: 64px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .chatbot-toggle-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .chatbot-toggle-btn:hover::before {
+            left: 100%;
+        }
+
+        .chatbot-toggle-btn .robot-emoji-small {
+            position: relative;
+            z-index: 1;
+            font-size: 1.4rem;
+            animation: float 3s ease-in-out infinite;
+            display: block;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .chatbot-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--secondary);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 8px;
+            border: 2px solid var(--dark);
+            z-index: 2;
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .chatbot-toggle-btn:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 4px;
+        }
+
+        .chatbot-toggle-btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 12px 32px rgba(0, 212, 255, 0.5),
+                        0 0 0 4px rgba(0, 212, 255, 0.2);
+            border-color: var(--primary);
+        }
+
+        .chatbot-toggle-btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .chatbot-toggle-btn.show {
+            display: flex !important;
+            animation: fadeInScale 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Page Content */
+        .page-content {
+            display: block;
+        }
+
+        .page-content.hidden {
+            display: none;
+        }
+
+        .page-header-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .page-header-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .page-header-section p {
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        /* Database Page Styles */
+        .data-sources-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .data-source-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .data-source-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .data-source-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--primary);
+        }
+
+        .source-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .source-info i {
+            font-size: 1.5rem;
+        }
+
+        .source-info div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .source-info strong {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .source-info span {
+            color: var(--text);
+            font-size: 0.85rem;
+        }
+
+        .source-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .status-badge.active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .btn-icon {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-icon:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .add-source-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .source-type-btn {
+            padding: 1.5rem;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            font-family: inherit;
+        }
+
+        .source-type-btn i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .source-type-btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Projects Page Styles */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.8rem;
+            background: rgba(15, 20, 25, 0.4);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .project-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .project-card.new-project {
+            border: 2px dashed var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+            cursor: pointer;
+        }
+
+        .project-card.new-project:hover {
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .new-project-content {
+            text-align: center;
+        }
+
+        .new-project-content i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .project-header h3 {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .project-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .project-badge.secondary {
+            background: rgba(107, 114, 128, 0.2);
+            color: #6b7280;
+        }
+
+        .project-description {
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .project-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text);
+            font-size: 0.85rem;
+        }
+
+        .project-stat i {
+            color: var(--primary);
+        }
+
+        .project-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Tools Page Styles */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tool-card {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2rem;
+            background: rgba(15, 20, 25, 0.4);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .tool-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tool-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.5rem;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tool-icon i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .tool-card h3 {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .tool-card p {
+            color: var(--text);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* Settings Page Styles */
+        .settings-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .settings-section {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2rem;
+            background: rgba(15, 20, 25, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .settings-section h3 {
+            color: #ffffff;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.05);
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-label {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .settings-label label {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .settings-label span {
+            color: var(--text);
+            font-size: 0.85rem;
+        }
+
+        .settings-input {
+            padding: 0.7rem 1rem;
+            background: rgba(15, 20, 25, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            min-width: 250px;
+            transition: all 0.3s ease;
+        }
+
+        .settings-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(15, 20, 25, 0.8);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(107, 114, 128, 0.3);
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Profile Page Styles */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: rgba(15, 20, 25, 0.4);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2.5rem;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--dark);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info h2 {
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .profile-info p {
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--primary);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 8px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .activity-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Form Page Styles */
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .project-form {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .form-section {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2rem;
+            background: rgba(15, 20, 25, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-section h3 {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(15, 20, 25, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(15, 20, 25, 0.8);
+        }
+
+        .form-input::placeholder {
+            color: #6a7280;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .data-sources-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-label:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--primary);
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-label span {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .data-sources-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+            }
+
+            .form-actions button {
+                width: 100%;
+            }
+        }
+
+        .activity-item i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .activity-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .activity-content strong {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .activity-content span {
+            color: var(--text);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 1024px) {
+            .chat-toggle-btn {
+                display: flex;
+            }
+
+            .chatbot-toggle-btn {
+                right: 1.5rem;
+                bottom: 5.5rem;
+                width: 60px;
+                height: 60px;
+            }
+
+            .chatbot-widget {
+                width: calc(100vw - 2rem);
+                max-width: 400px;
+                height: calc(100vh - 120px);
+                max-height: 650px;
+                bottom: 1rem;
+                right: 1rem;
+            }
+
+            .add-source-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .projects-grid,
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .settings-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .settings-input {
+                width: 100%;
+                min-width: auto;
+            }
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            background: rgba(15, 20, 25, 0.8);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            resize: none;
+            min-height: 50px;
+            max-height: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(15, 20, 25, 0.9);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        }
+
+        .chat-input::placeholder {
+            color: #6a7280;
+        }
+
+        .chat-send {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            background: linear-gradient(135deg, var(--primary), #00a8cc);
+            color: var(--dark);
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+        }
+
+        .chat-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+            background: linear-gradient(135deg, #00e5ff, var(--primary));
+        }
+
+        .chat-send:active {
+            transform: translateY(0);
+        }
+
+        .chat-send i {
+            font-size: 0.9rem;
+        }
+
+        /* Top Navigation Links */
+        .top-nav {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1.5rem;
+            z-index: 1000;
+            background: rgba(10, 14, 20, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .top-nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .top-nav a:hover {
+            color: var(--primary);
+        }
+
+        .top-nav a:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* Mobile menu button for sidebar */
+        .mobile-sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1002;
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+        }
+
+        .mobile-sidebar-toggle:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                padding-top: 80px;
+            }
+
+            .mobile-sidebar-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                position: fixed;
+                height: 100vh;
+                z-index: 1001;
+                top: 0;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .chat-sidebar {
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                position: fixed;
+                height: 100vh;
+                z-index: 1001;
+                right: 0;
+                top: 0;
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .chat-sidebar.active {
+                transform: translateX(0);
+            }
+
+            .chat-fixed-section {
+                max-height: 40vh;
+                overflow-y: auto;
+            }
+
+            .chatbot-widget {
+                width: calc(100vw - 40px);
+                max-width: 380px;
+                height: calc(100vh - 100px);
+                max-height: 600px;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .chatbot-widget.minimized {
+                width: 60px;
+                height: 60px;
+            }
+
+            .top-nav {
+                top: 0.5rem;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 0.6rem 1rem;
+                gap: 1rem;
+                font-size: 0.85rem;
+                width: auto;
+                max-width: calc(100vw - 2rem);
+            }
+
+            .main-content {
+                padding: 1.5rem 1rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .charts-section {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .header-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid var(--border);
+            background: linear-gradient(180deg, 
+                rgba(10, 14, 20, 0.8) 0%, 
+                rgba(15, 20, 25, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            margin-top: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-description {
+            color: var(--text);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .footer-social a:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+        }
+
+        .footer-section h3 {
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copyright {
+            color: #6a7280;
+            font-size: 0.85rem;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-legal a {
+            color: #6a7280;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-legal a:hover {
+            color: var(--primary);
+        }
+
+        @media (max-width: 968px) {
+            .footer-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .footer-brand {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 568px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-legal {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+    
+    <!-- Top Navigation -->
+    <nav class="top-nav" role="navigation" aria-label="Navigation secondaire">
+        <a href="../index.html">Accueil</a>
+        <a href="page2_pricing_redesign.html">Abonnements</a>
+        <a href="page3_interface_redesign.html" aria-current="page">Interface</a>
+    </nav>
+
+    <!-- Mobile Sidebar Toggle -->
+    <button class="mobile-sidebar-toggle" aria-label="Ouvrir le menu" id="mobile-sidebar-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Mobile Chat Toggle - Opens Recommendations Sidebar -->
+    <button class="chat-toggle-btn" aria-label="Ouvrir les recommandations IA" id="chat-toggle-btn">
+        <i class="fas fa-chart-line"></i>
+    </button>
+
+    <!-- Floating Chatbot Toggle Button (shown when chatbot is closed) -->
+    <button class="chatbot-toggle-btn" aria-label="Ouvrir le chatbot" id="chatbot-toggle-btn" style="display: none;">
+        <span class="robot-emoji-small">🤖</span>
+        <span class="chatbot-badge">IA</span>
+    </button>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" role="complementary" aria-label="Menu de navigation">
+            <div class="sidebar-logo">
+                <a href="../index.html" title="Retour à l'accueil">DataOps</a>
+            </div>
+            <nav>
+                <ul class="sidebar-menu" role="menu">
+                    <li role="none">
+                        <button class="sidebar-item active" data-page="dashboard" role="menuitem" aria-current="page">
+                            <i class="fas fa-chart-line" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                        </button>
+                    </li>
+                    <li role="none">
+                        <button class="sidebar-item" data-page="database" role="menuitem">
+                            <i class="fas fa-database" aria-hidden="true"></i>
+                            <span>Base données</span>
+                        </button>
+                    </li>
+                    <li role="none">
+                        <button class="sidebar-item" data-page="projects" role="menuitem">
+                            <i class="fas fa-folder" aria-hidden="true"></i>
+                            <span>Projets</span>
+                        </button>
+                    </li>
+                    <li role="none">
+                        <button class="sidebar-item" data-page="tools" role="menuitem">
+                            <i class="fas fa-tools" aria-hidden="true"></i>
+                            <span>Outils</span>
+                        </button>
+                    </li>
+                    <li role="none">
+                        <button class="sidebar-item" data-page="settings" role="menuitem">
+                            <i class="fas fa-cog" aria-hidden="true"></i>
+                            <span>Paramètres</span>
+                        </button>
+                    </li>
+                    <li role="none">
+                        <button class="sidebar-item" data-page="profile" role="menuitem">
+                            <i class="fas fa-user" aria-hidden="true"></i>
+                            <span>Profil</span>
+                        </button>
+                    </li>
+                    <li role="none">
+                        <button class="sidebar-item" data-page="form" role="menuitem">
+                            <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                            <span>Nouveau Projet</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content" class="main-content" role="main">
+            <div class="header-bar">
+                <div class="header-title" id="page-title">Dashboard</div>
+                <div class="header-user">
+                    <i class="fas fa-bell"></i>
+                    <span>Utilisateur</span>
+                </div>
+            </div>
+
+            <!-- Dashboard Page -->
+            <div class="page-content" id="page-dashboard">
+                <!-- Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Revenus du mois</div>
+                        <div class="metric-value">12,540€</div>
+                        <div class="metric-change">↑ +12% vs mois dernier</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Panier moyen</div>
+                        <div class="metric-value">87€</div>
+                        <div class="metric-change">↑ +3.2% vs mois dernier</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Taux de conversion</div>
+                        <div class="metric-value">3.8%</div>
+                        <div class="metric-change">↑ +0.5% vs mois dernier</div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <div class="chart-title">Croissance des Ventes</div>
+                        <div class="chart-container">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Répartition par Catégorie</div>
+                        <div class="chart-container">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <div class="chart-title">Évolution Mensuelle</div>
+                        <div class="chart-container">
+                            <canvas id="monthlyChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Performance par Canal</div>
+                        <div class="chart-container">
+                            <canvas id="channelChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products -->
+                <div class="products-section">
+                    <div class="products-title">Top Produits</div>
+                    <ul class="product-list">
+                        <li class="product-item">
+                            <span class="product-name">Produit A - iPhone 15 Pro</span>
+                            <span class="product-value">4,250€</span>
+                        </li>
+                        <li class="product-item">
+                            <span class="product-name">Produit B - MacBook Air</span>
+                            <span class="product-value">3,180€</span>
+                        </li>
+                        <li class="product-item">
+                            <span class="product-name">Produit C - AirPods Pro</span>
+                            <span class="product-value">2,890€</span>
+                        </li>
+                        <li class="product-item">
+                            <span class="product-name">Produit D - Apple Watch</span>
+                            <span class="product-value">1,620€</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Database Page -->
+            <div class="page-content hidden" id="page-database">
+                <div class="page-header-section">
+                    <h2>Gestion des Bases de Données</h2>
+                    <p>Connectez et gérez vos sources de données</p>
+                </div>
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <div class="chart-title">
+                            <i class="fas fa-database" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                            Sources connectées
+                        </div>
+                        <div class="data-sources-list">
+                            <div class="data-source-item">
+                                <div class="source-info">
+                                    <i class="fas fa-server" style="color: var(--primary);"></i>
+                                    <div>
+                                        <strong>PostgreSQL</strong>
+                                        <span>Production DB</span>
+                                    </div>
+                                </div>
+                                <div class="source-status">
+                                    <span class="status-badge active">Connecté</span>
+                                    <button class="btn-icon"><i class="fas fa-cog"></i></button>
+                                </div>
+                            </div>
+                            <div class="data-source-item">
+                                <div class="source-info">
+                                    <i class="fas fa-cloud" style="color: var(--primary);"></i>
+                                    <div>
+                                        <strong>Google Analytics</strong>
+                                        <span>Données web</span>
+                                    </div>
+                                </div>
+                                <div class="source-status">
+                                    <span class="status-badge active">Connecté</span>
+                                    <button class="btn-icon"><i class="fas fa-cog"></i></button>
+                                </div>
+                            </div>
+                            <div class="data-source-item">
+                                <div class="source-info">
+                                    <i class="fas fa-file-csv" style="color: var(--primary);"></i>
+                                    <div>
+                                        <strong>CSV Import</strong>
+                                        <span>Ventes Q1 2025</span>
+                                    </div>
+                                </div>
+                                <div class="source-status">
+                                    <span class="status-badge">Déconnecté</span>
+                                    <button class="btn-icon"><i class="fas fa-cog"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">
+                            <i class="fas fa-plus-circle" style="color: var(--secondary); margin-right: 0.5rem;"></i>
+                            Ajouter une source
+                        </div>
+                        <div class="add-source-grid">
+                            <button class="source-type-btn">
+                                <i class="fas fa-database"></i>
+                                Base de données
+                            </button>
+                            <button class="source-type-btn">
+                                <i class="fas fa-cloud"></i>
+                                API Cloud
+                            </button>
+                            <button class="source-type-btn">
+                                <i class="fas fa-file-upload"></i>
+                                Fichier CSV
+                            </button>
+                            <button class="source-type-btn">
+                                <i class="fas fa-plug"></i>
+                                Intégration
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Page -->
+            <div class="page-content hidden" id="page-projects">
+                <div class="page-header-section">
+                    <h2>Mes Projets</h2>
+                    <p>Gérez vos projets d'analyse et de visualisation</p>
+                </div>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3>Analyse E-commerce</h3>
+                            <span class="project-badge">Actif</span>
+                        </div>
+                        <p class="project-description">Analyse des performances de vente en ligne</p>
+                        <div class="project-stats">
+                            <div class="project-stat">
+                                <i class="fas fa-chart-line"></i>
+                                <span>12 graphiques</span>
+                            </div>
+                            <div class="project-stat">
+                                <i class="fas fa-calendar"></i>
+                                <span>Mis à jour il y a 2h</span>
+                            </div>
+                        </div>
+                        <div class="project-actions">
+                            <button class="btn-secondary">Ouvrir</button>
+                            <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3>Dashboard Marketing</h3>
+                            <span class="project-badge">Actif</span>
+                        </div>
+                        <p class="project-description">Suivi des campagnes marketing et ROI</p>
+                        <div class="project-stats">
+                            <div class="project-stat">
+                                <i class="fas fa-chart-line"></i>
+                                <span>8 graphiques</span>
+                            </div>
+                            <div class="project-stat">
+                                <i class="fas fa-calendar"></i>
+                                <span>Mis à jour il y a 1j</span>
+                            </div>
+                        </div>
+                        <div class="project-actions">
+                            <button class="btn-secondary">Ouvrir</button>
+                            <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-header">
+                            <h3>Analyse Financière</h3>
+                            <span class="project-badge secondary">En pause</span>
+                        </div>
+                        <p class="project-description">Tableaux de bord financiers et prévisions</p>
+                        <div class="project-stats">
+                            <div class="project-stat">
+                                <i class="fas fa-chart-line"></i>
+                                <span>15 graphiques</span>
+                            </div>
+                            <div class="project-stat">
+                                <i class="fas fa-calendar"></i>
+                                <span>Mis à jour il y a 3j</span>
+                            </div>
+                        </div>
+                        <div class="project-actions">
+                            <button class="btn-secondary">Ouvrir</button>
+                            <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                    </div>
+                    <div class="project-card new-project">
+                        <div class="new-project-content">
+                            <i class="fas fa-plus-circle"></i>
+                            <h3>Créer un nouveau projet</h3>
+                            <p>Commencez un nouveau projet d'analyse</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tools Page -->
+            <div class="page-content hidden" id="page-tools">
+                <div class="page-header-section">
+                    <h2>Outils d'Analyse</h2>
+                    <p>Utilisez nos outils pour analyser et transformer vos données</p>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <h3>A/B Testing</h3>
+                        <p>Lancez des tests A/B automatisés pour optimiser vos conversions</p>
+                        <button class="btn-primary">Utiliser</button>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>Prédictions IA</h3>
+                        <p>Générez des prévisions basées sur l'intelligence artificielle</p>
+                        <button class="btn-primary">Utiliser</button>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3>Analyse de Cohorte</h3>
+                        <p>Analysez le comportement de vos utilisateurs par cohorte</p>
+                        <button class="btn-primary">Utiliser</button>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-funnel-dollar"></i>
+                        </div>
+                        <h3>Analyse de Funnel</h3>
+                        <p>Identifiez les points de friction dans votre parcours client</p>
+                        <button class="btn-primary">Utiliser</button>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Segmentation</h3>
+                        <p>Créez des segments de clients personnalisés</p>
+                        <button class="btn-primary">Utiliser</button>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h3>Alertes Intelligentes</h3>
+                        <p>Configurez des alertes automatiques sur vos métriques clés</p>
+                        <button class="btn-primary">Utiliser</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div class="page-content hidden" id="page-settings">
+                <div class="page-header-section">
+                    <h2>Paramètres</h2>
+                    <p>Configurez votre compte et vos préférences</p>
+                </div>
+                <div class="settings-sections">
+                    <div class="settings-section">
+                        <h3>Compte</h3>
+                        <div class="settings-item">
+                            <div class="settings-label">
+                                <label>Nom d'utilisateur</label>
+                                <span>Votre identifiant unique</span>
+                            </div>
+                            <input type="text" class="settings-input" value="utilisateur@dataops.fr" />
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-label">
+                                <label>Email</label>
+                                <span>Adresse email principale</span>
+                            </div>
+                            <input type="email" class="settings-input" value="contact@monentreprise.fr" />
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-label">
+                                <label>Langue</label>
+                                <span>Langue de l'interface</span>
+                            </div>
+                            <select class="settings-input">
+                                <option>Français</option>
+                                <option>English</option>
+                                <option>Español</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h3>Notifications</h3>
+                        <div class="settings-item">
+                            <div class="settings-label">
+                                <label>Alertes par email</label>
+                                <span>Recevoir des notifications par email</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-label">
+                                <label>Alertes en temps réel</label>
+                                <span>Notifications push dans l'application</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-label">
+                                <label>Rapports hebdomadaires</label>
+                                <span>Recevoir un résumé chaque semaine</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h3>Sécurité</h3>
+                        <div class="settings-item">
+                            <div class="settings-label">
+                                <label>Mot de passe</label>
+                                <span>Dernière modification il y a 30 jours</span>
+                            </div>
+                            <button class="btn-secondary">Modifier</button>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-label">
+                                <label>Authentification à deux facteurs</label>
+                                <span>Protégez votre compte avec 2FA</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Page -->
+            <div class="page-content hidden" id="page-profile">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="profile-info">
+                        <h2>Utilisateur DataOps</h2>
+                        <p>utilisateur@dataops.fr</p>
+                        <span class="profile-badge">Plan PME</span>
+                    </div>
+                    <button class="btn-secondary">Modifier le profil</button>
+                </div>
+                <div class="charts-section">
+                    <div class="chart-card">
+                        <div class="chart-title">Statistiques d'utilisation</div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value">24</div>
+                                <div class="stat-label">Projets créés</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">156</div>
+                                <div class="stat-label">Analyses effectuées</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">8</div>
+                                <div class="stat-label">Sources connectées</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Tests A/B lancés</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-title">Activité récente</div>
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <i class="fas fa-chart-line"></i>
+                                <div class="activity-content">
+                                    <strong>Dashboard mis à jour</strong>
+                                    <span>Il y a 2 heures</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-database"></i>
+                                <div class="activity-content">
+                                    <strong>Nouvelle source connectée</strong>
+                                    <span>Il y a 1 jour</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-flask"></i>
+                                <div class="activity-content">
+                                    <strong>Test A/B lancé</strong>
+                                    <span>Il y a 3 jours</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-project-diagram"></i>
+                                <div class="activity-content">
+                                    <strong>Nouveau projet créé</strong>
+                                    <span>Il y a 5 jours</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Page -->
+            <div class="page-content hidden" id="page-form">
+                <div class="page-header-section">
+                    <h2>Créer un Nouveau Projet</h2>
+                    <p>Configurez votre projet d'analyse en quelques étapes</p>
+                </div>
+                <div class="form-container">
+                    <form id="project-form" class="project-form">
+                        <div class="form-section">
+                            <h3>Informations du Projet</h3>
+                            <div class="form-group">
+                                <label for="project-name">Nom du projet *</label>
+                                <input type="text" id="project-name" name="project-name" class="form-input" placeholder="Ex: Analyse E-commerce Q1 2025" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="project-description">Description</label>
+                                <textarea id="project-description" name="project-description" class="form-input" rows="4" placeholder="Décrivez l'objectif de votre projet..."></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="project-type">Type de projet *</label>
+                                    <select id="project-type" name="project-type" class="form-input" required>
+                                        <option value="">Sélectionnez un type</option>
+                                        <option value="ecommerce">E-commerce</option>
+                                        <option value="marketing">Marketing</option>
+                                        <option value="finance">Finance</option>
+                                        <option value="hr">Ressources Humaines</option>
+                                        <option value="other">Autre</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="project-priority">Priorité</label>
+                                    <select id="project-priority" name="project-priority" class="form-input">
+                                        <option value="low">Basse</option>
+                                        <option value="medium" selected>Moyenne</option>
+                                        <option value="high">Haute</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Sources de Données</h3>
+                            <div class="form-group">
+                                <label>Connecter des sources de données</label>
+                                <div class="data-sources-selector">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="sources" value="database" />
+                                        <span>Base de données</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="sources" value="api" />
+                                        <span>API Cloud</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="sources" value="csv" />
+                                        <span>Fichier CSV</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="sources" value="analytics" />
+                                        <span>Google Analytics</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Paramètres d'Analyse</h3>
+                            <div class="form-group">
+                                <label for="analysis-frequency">Fréquence d'analyse</label>
+                                <select id="analysis-frequency" name="analysis-frequency" class="form-input">
+                                    <option value="realtime">Temps réel</option>
+                                    <option value="hourly">Toutes les heures</option>
+                                    <option value="daily" selected>Quotidienne</option>
+                                    <option value="weekly">Hebdomadaire</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="ai-recommendations" checked />
+                                    <span>Activer les recommandations IA</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="auto-alerts" />
+                                    <span>Alertes automatiques</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="document.querySelector('[data-page=\'projects\']').click()">Annuler</button>
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-plus-circle"></i>
+                                Créer le projet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <!-- Chat Sidebar - Fixed Recommendations Only -->
+        <aside class="chat-sidebar" role="complementary" aria-label="Recommandations IA">
+            <div class="chat-header">
+                <i class="fas fa-chart-line" aria-hidden="true"></i>
+                Recommandations IA
+            </div>
+
+            <!-- Fixed Recommendations Section -->
+            <div class="chat-fixed-section" id="fixed-recommendations">
+                <div class="insights-card">
+                    <h4>
+                        <i class="fas fa-lightbulb"></i>
+                        Insights Clés
+                    </h4>
+                    <ul class="insights-list" id="insights-list">
+                        <!-- Will be populated by JavaScript based on real data -->
+                    </ul>
+                </div>
+
+                <div class="ab-test-card">
+                    <div class="ab-test-title">🧪 A/B Test Recommandé</div>
+                    <div class="ab-test-content" id="ab-test-content">
+                        <strong id="ab-test-title">Optimiser le bouton CTA</strong><br>
+                        <span id="ab-test-impact">Impact estimé : +8% conversion</span>
+                    </div>
+                    <div class="ab-test-buttons">
+                        <button class="ab-btn launch">Lancer</button>
+                        <button class="ab-btn secondary">Modifier</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Floating Draggable Chatbot Widget -->
+        <div class="chatbot-widget" id="chatbot-widget">
+            <div class="chatbot-header" id="chatbot-header">
+                <div class="chatbot-header-title">
+                    <span class="robot-emoji">🤖</span>
+                    <span>Assistant IA</span>
+                </div>
+                <div class="chatbot-controls">
+                    <button class="chatbot-btn" id="chatbot-minimize" aria-label="Réduire le chatbot">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button class="chatbot-btn" id="chatbot-close" aria-label="Fermer le chatbot">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="chatbot-content">
+                <!-- Dynamic Chat Messages -->
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Chat messages will be added here dynamically -->
+                </div>
+
+                <div class="chat-input-area">
+                    <textarea class="chat-input" id="chat-input" placeholder="Posez une question à l'IA..." aria-label="Zone de saisie pour poser une question à l'assistant IA" rows="2"></textarea>
+                    <button class="chat-send" id="chat-send" aria-label="Envoyer votre question à l'assistant IA">
+                        <i class="fas fa-paper-plane"></i>
+                        Envoyer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile sidebar toggle
+        const mobileSidebarToggle = document.getElementById('mobile-sidebar-toggle');
+        const chatToggleBtn = document.getElementById('chat-toggle-btn');
+        const sidebar = document.querySelector('.sidebar');
+        const chatSidebar = document.querySelector('.chat-sidebar');
+        
+        if (mobileSidebarToggle) {
+            mobileSidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                // Close chat sidebar when opening main sidebar
+                if (chatSidebar.classList.contains('active')) {
+                    chatSidebar.classList.remove('active');
+                }
+                const icon = this.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            });
+        }
+
+        // Mobile chat sidebar toggle - Now toggles recommendations sidebar
+        if (chatToggleBtn) {
+            chatToggleBtn.addEventListener('click', function() {
+                chatSidebar.classList.toggle('active');
+                // Close main sidebar when opening chat sidebar
+                if (sidebar.classList.contains('active')) {
+                    sidebar.classList.remove('active');
+                    if (mobileSidebarToggle) {
+                        const icon = mobileSidebarToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                }
+            });
+        }
+
+        // Chatbot Widget Draggable Functionality
+        const chatbotWidget = document.getElementById('chatbot-widget');
+        const chatbotHeader = document.getElementById('chatbot-header');
+        const chatbotMinimize = document.getElementById('chatbot-minimize');
+        const chatbotClose = document.getElementById('chatbot-close');
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        if (chatbotWidget && chatbotHeader) {
+            // Make chatbot draggable
+            chatbotHeader.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+
+            // Touch events for mobile
+            chatbotHeader.addEventListener('touchstart', dragStart);
+            document.addEventListener('touchmove', drag);
+            document.addEventListener('touchend', dragEnd);
+
+            function dragStart(e) {
+                if (chatbotWidget.classList.contains('minimized')) return;
+                
+                if (e.type === "touchstart") {
+                    initialX = e.touches[0].clientX - xOffset;
+                    initialY = e.touches[0].clientY - yOffset;
+                } else {
+                    initialX = e.clientX - xOffset;
+                    initialY = e.clientY - yOffset;
+                }
+
+                if (e.target === chatbotHeader || chatbotHeader.contains(e.target)) {
+                    if (e.target.closest('.chatbot-btn')) {
+                        return; // Don't drag if clicking buttons
+                    }
+                    isDragging = true;
+                    chatbotWidget.classList.add('dragging');
+                }
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+
+                e.preventDefault();
+
+                if (e.type === "touchmove") {
+                    currentX = e.touches[0].clientX - initialX;
+                    currentY = e.touches[0].clientY - initialY;
+                } else {
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                }
+
+                xOffset = currentX;
+                yOffset = currentY;
+
+                setTranslate(currentX, currentY, chatbotWidget);
+            }
+
+            function dragEnd() {
+                if (isDragging) {
+                    initialX = currentX;
+                    initialY = currentY;
+                    isDragging = false;
+                    chatbotWidget.classList.remove('dragging');
+                }
+            }
+
+            function setTranslate(xPos, yPos, el) {
+                el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+            }
+
+            // Minimize/Maximize functionality
+            if (chatbotMinimize) {
+                chatbotMinimize.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    chatbotWidget.classList.toggle('minimized');
+                    if (chatbotWidget.classList.contains('minimized')) {
+                        chatbotMinimize.querySelector('i').classList.remove('fa-minus');
+                        chatbotMinimize.querySelector('i').classList.add('fa-plus');
+                        // Show toggle button when minimized
+                        setTimeout(function() {
+                            showChatbotToggle();
+                        }, 100);
+                    } else {
+                        chatbotMinimize.querySelector('i').classList.remove('fa-plus');
+                        chatbotMinimize.querySelector('i').classList.add('fa-minus');
+                        // Hide toggle button when maximized
+                        hideChatbotToggle();
+                    }
+                });
+            }
+
+            // Close functionality
+            const chatbotToggleBtn = document.getElementById('chatbot-toggle-btn');
+            
+            function showChatbotToggle() {
+                if (chatbotToggleBtn) {
+                    chatbotToggleBtn.classList.add('show');
+                    chatbotToggleBtn.style.display = 'flex';
+                    // Force position
+                    chatbotToggleBtn.style.bottom = '2rem';
+                    chatbotToggleBtn.style.right = '2rem';
+                    chatbotToggleBtn.style.position = 'fixed';
+                }
+            }
+
+            function hideChatbotToggle() {
+                if (chatbotToggleBtn) {
+                    chatbotToggleBtn.classList.remove('show');
+                    chatbotToggleBtn.style.display = 'none';
+                }
+            }
+
+            if (chatbotClose) {
+                chatbotClose.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    chatbotWidget.style.display = 'none';
+                    showChatbotToggle();
+                });
+            }
+
+            // Show toggle button when chatbot is closed
+            if (chatbotToggleBtn) {
+                // Check initial state - show button if widget is hidden or minimized
+                setTimeout(function() {
+                    const widgetDisplay = window.getComputedStyle(chatbotWidget).display;
+                    const isMinimized = chatbotWidget.classList.contains('minimized');
+                    
+                    if (widgetDisplay === 'none' || isMinimized) {
+                        showChatbotToggle();
+                    } else {
+                        hideChatbotToggle();
+                    }
+                }, 200);
+
+                chatbotToggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    
+                    // Show widget
+                    chatbotWidget.style.display = 'flex';
+                    chatbotWidget.classList.remove('minimized');
+                    
+                    // Reset minimize button icon
+                    if (chatbotMinimize) {
+                        chatbotMinimize.querySelector('i').classList.remove('fa-plus');
+                        chatbotMinimize.querySelector('i').classList.add('fa-minus');
+                    }
+                    
+                    // Hide toggle button
+                    hideChatbotToggle();
+                    
+                    // Reset position when reopening - position it nicely
+                    chatbotWidget.style.bottom = '20px';
+                    chatbotWidget.style.right = '20px';
+                    chatbotWidget.style.transform = 'translate3d(0, 0, 0)';
+                    xOffset = 0;
+                    yOffset = 0;
+                });
+            }
+
+            // Ensure toggle button visibility on page load and when widget is minimized
+            function checkChatbotState() {
+                const chatbotToggleBtn = document.getElementById('chatbot-toggle-btn');
+                const chatbotWidget = document.getElementById('chatbot-widget');
+                if (chatbotToggleBtn && chatbotWidget) {
+                    const widgetDisplay = window.getComputedStyle(chatbotWidget).display;
+                    const isMinimized = chatbotWidget.classList.contains('minimized');
+                    
+                    if (widgetDisplay === 'none' || isMinimized) {
+                        showChatbotToggle();
+                    } else {
+                        hideChatbotToggle();
+                    }
+                }
+            }
+
+            window.addEventListener('load', function() {
+                setTimeout(checkChatbotState, 300);
+            });
+
+            // Also check on DOMContentLoaded
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(checkChatbotState, 300);
+            });
+
+            // Observer pour détecter les changements de visibilité du widget
+            if (chatbotWidget) {
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'attributes' && 
+                            (mutation.attributeName === 'style' || mutation.attributeName === 'class')) {
+                            setTimeout(checkChatbotState, 100);
+                        }
+                    });
+                });
+
+                observer.observe(chatbotWidget, {
+                    attributes: true,
+                    attributeFilter: ['style', 'class']
+                });
+            }
+
+            // Click on minimized widget to maximize
+            chatbotWidget.addEventListener('click', function(e) {
+                if (chatbotWidget.classList.contains('minimized') && !e.target.closest('.chatbot-btn')) {
+                    chatbotWidget.classList.remove('minimized');
+                    if (chatbotMinimize) {
+                        chatbotMinimize.querySelector('i').classList.remove('fa-plus');
+                        chatbotMinimize.querySelector('i').classList.add('fa-minus');
+                    }
+                }
+            });
+        }
+
+        // Page titles mapping
+        const pageTitles = {
+            'dashboard': 'Dashboard',
+            'database': 'Base de données',
+            'projects': 'Projets',
+            'tools': 'Outils',
+            'settings': 'Paramètres',
+            'profile': 'Profil',
+            'form': 'Nouveau Projet'
+        };
+
+        // Check for hash in URL and open corresponding page
+        function checkUrlHash() {
+            const hash = window.location.hash.substring(1); // Remove #
+            if (hash && pageTitles[hash]) {
+                const targetButton = document.querySelector(`[data-page="${hash}"]`);
+                if (targetButton) {
+                    // Small delay to ensure DOM is ready
+                    setTimeout(() => {
+                        targetButton.click();
+                    }, 300);
+                }
+            }
+        }
+
+        // Check hash on page load
+        window.addEventListener('load', checkUrlHash);
+        window.addEventListener('hashchange', checkUrlHash);
+
+        // Sidebar item click handlers
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const pageId = this.getAttribute('data-page');
+                
+                // Update active state
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update page title
+                const pageTitle = document.getElementById('page-title');
+                if (pageTitle && pageTitles[pageId]) {
+                    pageTitle.textContent = pageTitles[pageId];
+                }
+                
+                // Show/hide page content
+                document.querySelectorAll('.page-content').forEach(page => {
+                    page.classList.add('hidden');
+                });
+                
+                const targetPage = document.getElementById(`page-${pageId}`);
+                if (targetPage) {
+                    targetPage.classList.remove('hidden');
+                    // Trigger animations for new page
+                    setTimeout(() => {
+                        const elementsToAnimate = targetPage.querySelectorAll('.project-card:not(.new-project), .tool-card, .data-source-item, .activity-item');
+                        elementsToAnimate.forEach((el, index) => {
+                            setTimeout(() => {
+                                el.classList.add('visible');
+                            }, index * 50);
+                        });
+                    }, 100);
+                }
+                
+                // Close mobile sidebar after selection
+                if (window.innerWidth <= 1024) {
+                    sidebar.classList.remove('active');
+                    if (mobileSidebarToggle) {
+                        const icon = mobileSidebarToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                }
+            });
+        });
+
+        // AI Chatbot with intelligent responses
+        const aiResponses = {
+            'vente': 'Les ventes ont augmenté de 12% ce mois. Je recommande d\'analyser les produits les plus performants et de renforcer leur promotion.',
+            'conversion': 'Le taux de conversion est de 3.8%. Pour l\'améliorer, je suggère d\'optimiser le parcours d\'achat et de tester différentes variantes de CTA.',
+            'revenu': 'Les revenus mensuels s\'élèvent à 12,540€. C\'est une excellente performance ! Pour aller plus loin, analysez les segments clients les plus rentables.',
+            'graphique': 'Je peux vous aider à créer des visualisations personnalisées. Dites-moi quelles métriques vous souhaitez analyser.',
+            'aide': 'Je peux vous aider avec : analyse de données, recommandations d\'optimisation, création de graphiques, et interprétation des métriques.',
+            'bonjour': 'Bonjour ! Je suis votre assistant IA DataOps. Comment puis-je vous aider aujourd\'hui ?',
+            'salut': 'Salut ! Je suis là pour vous aider à analyser vos données. Que souhaitez-vous savoir ?',
+            'test': 'Pour lancer un test A/B, allez dans la section Outils. Je peux vous guider dans la configuration si besoin.',
+            'projet': 'Pour créer un nouveau projet, utilisez le formulaire dans le menu. Je peux vous aider à choisir les bonnes sources de données.',
+            'donnée': 'Vos données sont synchronisées en temps réel. Je peux vous aider à interpréter les tendances et anomalies détectées.',
+            'recommandation': 'Basé sur vos données actuelles, je recommande : 1) Optimiser l\'expérience mobile, 2) Tester de nouvelles couleurs de CTA, 3) Analyser les abandons de panier.'
+        };
+
+        function getAIResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            
+            // Check for keywords
+            for (const [keyword, response] of Object.entries(aiResponses)) {
+                if (lowerMessage.includes(keyword)) {
+                    return response;
+                }
+            }
+
+            // Default intelligent responses based on question patterns
+            if (lowerMessage.includes('comment') || lowerMessage.includes('pourquoi')) {
+                return 'Excellente question ! Basé sur vos données, je peux vous expliquer les tendances observées. Pourriez-vous préciser quelle métrique vous intéresse ?';
+            }
+
+            if (lowerMessage.includes('quoi') || lowerMessage.includes('qu\'est')) {
+                return 'Je peux vous aider à comprendre vos données et à prendre des décisions éclairées. Que souhaitez-vous analyser précisément ?';
+            }
+
+            // Default response
+            return 'Merci pour votre question ! Je suis en train d\'analyser vos données pour vous fournir une réponse précise. En attendant, je peux vous aider avec l\'analyse des ventes, la conversion, ou la création de visualisations.';
+        }
+
+        // Chat send functionality
+        const chatSend = document.getElementById('chat-send');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInputArea = document.querySelector('.chat-input-area');
+
+        function addChatMessage(message, isUser = false) {
+            if (!chatMessages) return;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${isUser ? 'user' : 'ai'}`;
+            messageDiv.innerHTML = `<strong>${isUser ? 'Vous' : 'Assistant IA'}:</strong><br>${message}`;
+            chatMessages.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'chat-message typing ai';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = '<strong>Assistant IA:</strong> En train de réfléchir';
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return typingDiv;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        if (chatSend && chatInput && chatMessages) {
+            chatSend.addEventListener('click', function() {
+                const message = chatInput.value.trim();
+                if (message) {
+                    // Add user message
+                    addChatMessage(message, true);
+                    chatInput.value = '';
+                    
+                    // Show typing indicator
+                    const typingIndicator = showTypingIndicator();
+                    
+                    // Simulate AI thinking and response
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        const aiResponse = getAIResponse(message);
+                        addChatMessage(aiResponse, false);
+                    }, 1000 + Math.random() * 1000); // Random delay between 1-2 seconds
+                }
+            });
+
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    chatSend.click();
+                }
+            });
+        }
+
+        // A/B Test button handlers
+        document.querySelectorAll('.ab-btn.launch').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('Lancement du test A/B... Cette fonctionnalité serait connectée à votre backend.');
+            });
+        });
+
+        document.querySelectorAll('.ab-btn.secondary').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('Modification du test A/B... Cette fonctionnalité ouvrirait un formulaire de modification.');
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -30px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+
+        // Observe metric cards and chart cards
+        document.querySelectorAll('.metric-card, .chart-card, .project-card:not(.new-project), .tool-card, .data-source-item, .activity-item').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Initialize animations for visible page on load
+        function initializePageAnimations() {
+            const visiblePage = document.querySelector('.page-content:not(.hidden)');
+            if (visiblePage) {
+                const elementsToAnimate = visiblePage.querySelectorAll('.project-card:not(.new-project), .tool-card, .data-source-item, .activity-item');
+                elementsToAnimate.forEach((el, index) => {
+                    setTimeout(() => {
+                        el.classList.add('visible');
+                    }, index * 50);
+                });
+            }
+        }
+
+        // Initialize on page load
+        setTimeout(initializePageAnimations, 100);
+
+        // Initialize Charts
+        function initCharts() {
+            // Sales Growth Chart (Line Chart)
+            const salesCtx = document.getElementById('salesChart');
+            if (salesCtx) {
+                new Chart(salesCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
+                        datasets: [{
+                            label: 'Ventes (€)',
+                            data: [8500, 9200, 9800, 10200, 11000, 11800, 12540, 13200, 14000, 14800, 15600, 16400],
+                            borderColor: '#00d4ff',
+                            backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#b0b8c8' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: '#b0b8c8' },
+                                grid: { color: 'rgba(0, 212, 255, 0.1)' }
+                            },
+                            x: {
+                                ticks: { color: '#b0b8c8' },
+                                grid: { color: 'rgba(0, 212, 255, 0.1)' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Category Chart (Doughnut Chart)
+            const categoryCtx = document.getElementById('categoryChart');
+            if (categoryCtx) {
+                new Chart(categoryCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Électronique', 'Vêtements', 'Alimentation', 'Maison', 'Autres'],
+                        datasets: [{
+                            data: [35, 25, 20, 15, 5],
+                            backgroundColor: [
+                                '#00d4ff',
+                                '#ff6b35',
+                                '#10b981',
+                                '#f59e0b',
+                                '#8b5cf6'
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#b0b8c8', padding: 15 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Monthly Chart (Bar Chart)
+            const monthlyCtx = document.getElementById('monthlyChart');
+            if (monthlyCtx) {
+                new Chart(monthlyCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                        datasets: [{
+                            label: 'Ventes hebdomadaires',
+                            data: [2100, 2300, 1950, 2450, 2800, 2200, 1900],
+                            backgroundColor: 'rgba(0, 212, 255, 0.6)',
+                            borderColor: '#00d4ff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#b0b8c8' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: '#b0b8c8' },
+                                grid: { color: 'rgba(0, 212, 255, 0.1)' }
+                            },
+                            x: {
+                                ticks: { color: '#b0b8c8' },
+                                grid: { color: 'rgba(0, 212, 255, 0.1)' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Channel Chart (Radar Chart)
+            const channelCtx = document.getElementById('channelChart');
+            if (channelCtx) {
+                new Chart(channelCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Web', 'Mobile', 'Email', 'Social', 'Direct'],
+                        datasets: [{
+                            label: 'Performance',
+                            data: [85, 65, 75, 60, 50],
+                            backgroundColor: 'rgba(0, 212, 255, 0.2)',
+                            borderColor: '#00d4ff',
+                            pointBackgroundColor: '#00d4ff',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: '#00d4ff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#b0b8c8' }
+                            }
+                        },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: { color: '#b0b8c8', backdropColor: 'transparent' },
+                                grid: { color: 'rgba(0, 212, 255, 0.1)' },
+                                pointLabels: { color: '#b0b8c8' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Generate AI recommendations based on real data
+        function generateAIRecommendations() {
+            // Get metrics from dashboard
+            const revenue = 12540;
+            const revenueChange = 12; // +12%
+            const avgCart = 87;
+            const cartChange = 3.2; // +3.2%
+            const conversion = 3.8;
+            const conversionChange = 0.5; // +0.5%
+
+            // Sales data (from chart)
+            const salesData = [8500, 9200, 9800, 10200, 11000, 11800, 12540, 13200, 14000, 14800, 15600, 16400];
+            const lastMonthSales = salesData[salesData.length - 2];
+            const currentMonthSales = salesData[salesData.length - 1];
+            const salesGrowth = ((currentMonthSales - lastMonthSales) / lastMonthSales * 100).toFixed(1);
+
+            // Category data (from chart)
+            const categoryData = { 'Électronique': 35, 'Vêtements': 25, 'Alimentation': 20, 'Maison': 15, 'Autres': 5 };
+            const topCategory = Object.keys(categoryData).reduce((a, b) => categoryData[a] > categoryData[b] ? a : b);
+
+            // Weekly data (from chart)
+            const weeklyData = [2100, 2300, 1950, 2450, 2800, 2200, 1900];
+            const avgWeekly = weeklyData.reduce((a, b) => a + b, 0) / weeklyData.length;
+            const bestDay = weeklyData.indexOf(Math.max(...weeklyData));
+            const days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+
+            // Channel performance (from radar chart)
+            const channelData = { 'Web': 85, 'Mobile': 65, 'Email': 75, 'Social': 60, 'Direct': 50 };
+            const bestChannel = Object.keys(channelData).reduce((a, b) => channelData[a] > channelData[b] ? a : b);
+            const worstChannel = Object.keys(channelData).reduce((a, b) => channelData[a] < channelData[b] ? a : b);
+
+            // Generate insights
+            const insights = [];
+            
+            if (revenueChange > 10) {
+                insights.push({ text: `Revenus en forte hausse (+${revenueChange}%) ce mois`, type: 'positive' });
+            } else if (revenueChange > 0) {
+                insights.push({ text: `Revenus en croissance (+${revenueChange}%)`, type: 'positive' });
+            }
+
+            if (conversion < 4) {
+                insights.push({ text: `Taux de conversion faible (${conversion}%) - Optimisation nécessaire`, type: 'negative' });
+            } else {
+                insights.push({ text: `Taux de conversion stable à ${conversion}%`, type: 'positive' });
+            }
+
+            if (channelData['Mobile'] < 70) {
+                insights.push({ text: `Performance mobile à améliorer (${channelData['Mobile']}%)`, type: 'negative' });
+            }
+
+            insights.push({ text: `Catégorie ${topCategory} dominante (${categoryData[topCategory]}%)`, type: 'positive' });
+            insights.push({ text: `Meilleur jour de vente : ${days[bestDay]}`, type: 'positive' });
+
+            // Update insights list
+            const insightsList = document.getElementById('insights-list');
+            if (insightsList) {
+                insightsList.innerHTML = '';
+                insights.forEach(insight => {
+                    const li = document.createElement('li');
+                    li.className = insight.type;
+                    li.textContent = insight.text;
+                    insightsList.appendChild(li);
+                });
+            }
+
+            // Generate A/B test recommendation based on data
+            let abTestTitle = 'Optimiser le bouton CTA';
+            let abTestImpact = '+8% conversion estimé';
+
+            if (conversion < 3.5) {
+                abTestTitle = 'Améliorer le parcours de conversion';
+                abTestImpact = '+12% conversion estimé';
+            } else if (channelData['Mobile'] < 70) {
+                abTestTitle = 'Optimiser l\'expérience mobile';
+                abTestImpact = '+15% conversion mobile estimé';
+            } else if (worstChannel === 'Social') {
+                abTestTitle = 'Améliorer les campagnes sociales';
+                abTestImpact = '+10% trafic social estimé';
+            }
+
+            // Update A/B test card
+            const abTestTitleEl = document.getElementById('ab-test-title');
+            const abTestImpactEl = document.getElementById('ab-test-impact');
+            if (abTestTitleEl) abTestTitleEl.textContent = abTestTitle;
+            if (abTestImpactEl) abTestImpactEl.textContent = `Impact estimé : ${abTestImpact}`;
+        }
+
+        // Initialize charts when dashboard page is shown
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate recommendations immediately
+            generateAIRecommendations();
+            
+            // Initialize charts after a short delay to ensure DOM is ready
+            setTimeout(() => {
+                if (document.getElementById('page-dashboard') && !document.getElementById('page-dashboard').classList.contains('hidden')) {
+                    initCharts();
+                }
+            }, 500);
+        });
+
+        // Reinitialize charts when switching to dashboard
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const pageId = this.getAttribute('data-page');
+                if (pageId === 'dashboard') {
+                    setTimeout(() => {
+                        initCharts();
+                        generateAIRecommendations(); // Regenerate recommendations when switching to dashboard
+                    }, 300);
+                }
+            });
+        });
+
+        // Form submission handler
+        const projectForm = document.getElementById('project-form');
+        if (projectForm) {
+            projectForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const projectData = {
+                    name: formData.get('project-name'),
+                    description: formData.get('project-description'),
+                    type: formData.get('project-type'),
+                    priority: formData.get('project-priority'),
+                    sources: formData.getAll('sources'),
+                    frequency: formData.get('analysis-frequency'),
+                    aiRecommendations: formData.get('ai-recommendations') ? true : false,
+                    autoAlerts: formData.get('auto-alerts') ? true : false
+                };
+
+                // Simulate API call
+                console.log('Projet créé:', projectData);
+                
+                // Show success message
+                alert('Projet créé avec succès ! Redirection vers la page Projets...');
+                
+                // Redirect to projects page
+                setTimeout(() => {
+                    document.querySelector('[data-page="projects"]').click();
+                }, 500);
+            });
+        }
+
+        // Close sidebars when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 1024) {
+                // Close main sidebar
+                if (!sidebar.contains(e.target) && !mobileSidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                    if (mobileSidebarToggle) {
+                        const icon = mobileSidebarToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                }
+                // Close chat sidebar
+                if (!chatSidebar.contains(e.target) && !chatToggleBtn.contains(e.target)) {
+                    chatSidebar.classList.remove('active');
+                }
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && href.length > 1) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="footer-logo">DataOps</div>
+                <p class="footer-description">Rendez la donnée accessible, compréhensible et exploitable. L'IA pour simplifier la data des PME/TPE.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="LinkedIn DataOps"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter DataOps"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="GitHub DataOps"><i class="fab fa-github"></i></a>
+                    <a href="#" aria-label="Email DataOps"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Produit</h3>
+                <ul class="footer-links">
+                    <li><a href="page3_interface_redesign.html">Interface</a></li>
+                    <li><a href="page2_pricing_redesign.html">Tarifs</a></li>
+                    <li><a href="../index.html#features">Fonctionnalités</a></li>
+                    <li><a href="page3_interface_redesign.html#form">Essai gratuit</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Entreprise</h3>
+                <ul class="footer-links">
+                    <li><a href="#">À propos</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Carrières</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Centre d'aide</a></li>
+                    <li><a href="#">API</a></li>
+                    <li><a href="#">Statut</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="footer-copyright">&copy; 2025 DataOps. Tous droits réservés.</p>
+            <div class="footer-legal">
+                <a href="#">Mentions légales</a>
+                <a href="#">Politique de confidentialité</a>
+                <a href="#">CGU</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
